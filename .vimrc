@@ -45,7 +45,6 @@ nnoremap <Leader>hw <C-W>h
 nnoremap <Leader>kw <C-W>k
 " 跳转至下方的子窗口
 nnoremap <Leader>jw <C-W>j
-
 " 定义快捷键在结对符之间跳转
 nmap <Leader>M %
 
@@ -107,7 +106,7 @@ Plugin 'gcmt/wildfire.vim'
 Plugin 'sjl/gundo.vim'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'suan/vim-instant-markdown'
-Plugin 'lilydjwg/fcitx.vim'
+"Plugin 'lilydjwg/fcitx.vim'
 
 " 插件列表结束
 call vundle#end()
@@ -116,8 +115,8 @@ filetype plugin indent on
 
 " 配色方案
 set background=dark
-colorscheme solarized
-"colorscheme molokai
+"colorscheme solarized
+colorscheme molokai
 "colorscheme phd
 
 " >>
@@ -179,7 +178,8 @@ set nowrap
 
 " 设置状态栏主题风格
 let g:Powerline_colorscheme='solarized256'
-
+let g:molokai_original = 1
+let g:rehash256 = 1
 " <<
 
 " >>
@@ -201,21 +201,21 @@ filetype indent on
 " 将制表符扩展为空格
 set expandtab
 " 设置编辑时制表符占用空格数
-set tabstop=4
+set tabstop=8
 " 设置格式化时制表符占用空格数
-set shiftwidth=4
+set shiftwidth=8
 " 让 vim 把连续数量的空格视为一个制表符
-set softtabstop=4
+set softtabstop=8
 
 " 缩进可视化插件 Indent Guides
 " 随 vim 自启动
-let g:indent_guides_enable_on_vim_startup=1
+" "let g:indent_guides_enable_on_vim_startup=1
 " 从第二层开始可视化显示缩进
-let g:indent_guides_start_level=2
+" "let g:indent_guides_start_level=2
 " 色块宽度
-let g:indent_guides_guide_size=1
+" "let g:indent_guides_guide_size=1
 " 快捷键 i 开/关缩进可视化
-nmap <silent> <Leader>i <Plug>IndentGuidesToggle
+" "nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 
 " <<
 
@@ -223,7 +223,7 @@ nmap <silent> <Leader>i <Plug>IndentGuidesToggle
 " 代码折叠
 
 " 基于缩进或语法进行代码折叠
-"set foldmethod=indent
+""set foldmethod=indent
 set foldmethod=syntax
 " 启动 vim 时关闭折叠代码
 set nofoldenable
@@ -276,9 +276,21 @@ let tagbar_left=1
 " 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
 nnoremap <Leader>ilt :TagbarToggle<CR>
 " 设置标签子窗口的宽度
-let tagbar_width=32
+let tagbar_width=30
 " tagbar 子窗口中不显示冗余帮助信息
 let g:tagbar_compact=1
+"设置tagbar使用的ctags的插件,必须要设置对
+let g:tagbar_ctags_bin='/usr/bin/ctags'
+"打开文件自动 打开tagbar
+autocmd BufReadPost *.cpp,*.c,*.h,*.hpp,*.cc,*.cxx call tagbar#autoopen()
+" 开启自动预览(随着光标在标签上的移动，顶部会出现一个实时的预览窗口)
+let g:tagbar_autopreview = 1
+" 设置预览窗口在左下角
+let g:tagbar_previewwin_pos = "below"
+" 设置tagbar自动关闭
+" let g:tagbar_autoclose = 1
+"关闭排序,即按标签本身在文件中的位置排序
+let g:tagbar_sort = 0
 " 设置 ctags 对哪些代码标识符生成标签
 let g:tagbar_type_cpp = {
      \ 'ctagstype' : 'c++',
@@ -468,7 +480,6 @@ let NERDTreeShowHidden=1
 let NERDTreeMinimalUI=1
 " 删除文件时自动删除文件对应 buffer
 let NERDTreeAutoDeleteBuffer=1
-
 " <<
 
 " >>
@@ -476,10 +487,9 @@ let NERDTreeAutoDeleteBuffer=1
  
 " 显示/隐藏 MiniBufExplorer 窗口
 map <Leader>bl :MBEToggle<cr>
-
 " buffer 切换快捷键
-map <C-Tab> :MBEbn<cr>
-map <C-S-Tab> :MBEbp<cr>
+map <Leader>2 :MBEbn<cr>
+map <Leader>1 :MBEbp<cr>
 
 " <<
 
@@ -522,4 +532,51 @@ let g:wildfire_objects = ["i'", 'i"', "i)", "i]", "i}", "i>", "ip"]
 
 " 调用 gundo 树
 nnoremap <Leader>ud :GundoToggle<CR>
+" 自动打开NERDTree
+autocmd VimEnter * NERDTree
+autocmd VimEnter * wincmd w
+" 自动补全
+inoremap ( ()<Esc>i
+inoremap [ []<Esc>i
+inoremap { {<CR>}<Esc>O
+autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
+inoremap ) <c-r>=ClosePair(')')<CR>
+inoremap ] <c-r>=ClosePair(']')<CR>
+inoremap } <c-r>=CloseBracket()<CR>
+inoremap " <c-r>=QuoteDelim('"')<CR>
+inoremap ' <c-r>=QuoteDelim("'")<CR>
 
+function ClosePair(char)
+ if getline('.')[col('.') - 1] == a:char
+ return "\<Right>"
+ else
+ return a:char
+ endif
+endf
+
+function CloseBracket()
+ if match(getline(line('.') + 1), '\s*}') < 0
+ return "\<CR>}"
+ else
+ return "\<Esc>j0f}a"
+ endif
+endf
+
+function QuoteDelim(char)
+ let line = getline('.')
+ let col = col('.')
+ if line[col - 2] == "\\"
+ "Inserting a quoted quotation mark into the string
+ return a:char
+ elseif line[col - 1] == a:char
+ "Escaping out of the string
+ return "\<Right>"
+ else
+ "Starting a string
+ return a:char.a:char."\<Esc>i"
+ endif
+endf
+" cscope 查看函数调用关 
+nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
+nmap <C-\>b :cs find c <C-R>=expand("<cword>")<CR><CR>
+cscope add cscope.out

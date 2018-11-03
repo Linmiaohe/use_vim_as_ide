@@ -1,0 +1,24 @@
+za -- 打开或关闭当前折叠；
+zM -- 关闭所有折叠
+zR -- 打开所有折叠
+=  -- 让 vim 对该行进行智能缩进格式化，要么按需键入多次 < 或 > 手工缩进格式
+;sw -- 在实现文件和接口文件间切换,再次键入;sw 后，当前窗口切回接口文件
+;ilt -- 打开tagbar
+;jc -- YcmCompleter GoToDeclaration<CR>
+;jd -- YcmCompleter GoToDefinition<CR>
+;cc -- 注释
+;cu -- 取消注释            
+;fl -- 查看工程文件
+u   撤销上一步的操作
+Ctrl+r 恢复上一步被撤销的操作
+Ctrl+ h(left)j(down)k(up)l(right) -- 切换窗口
+;1 -- Prev MiniBuffer Window
+;2 -- Next MiniBuffer Window
+CTRL-] -> 跟着link/tag转入 (follow link/tag)
+CRTL-t -> 跳回来
+CTRL-o -> 回到上一次的jump (go back)
+CTRL-i -> 跳回下一个 (go forward)
+ctags -R
+cscope -Rbq
+vim界面输入: cscope add cscope.out
+按CTRL+\作为进入命令模式的前缀符，按b则查看调用本函数的函数，按d则查看本函数调用的函数
