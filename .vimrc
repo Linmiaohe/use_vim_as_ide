@@ -276,7 +276,7 @@ let tagbar_left=1
 " 设置显示／隐藏标签列表子窗口的快捷键。速记：identifier list by tag
 nnoremap <Leader>ilt :TagbarToggle<CR>
 " 设置标签子窗口的宽度
-let tagbar_width=30
+let tagbar_width=42
 " tagbar 子窗口中不显示冗余帮助信息
 let g:tagbar_compact=1
 "设置tagbar使用的ctags的插件,必须要设置对
@@ -413,10 +413,11 @@ let g:UltiSnipsJumpBackwardTrigger="<leader><s-tab>"
 
 " YCM 补全菜单配色
 " 菜单
-highlight Pmenu ctermfg=2 ctermbg=3 guifg=#005f87 guibg=#EEE8D5
+"highlight Pmenu ctermfg=2 ctermbg=3 guifg=#005f87 guibg=#EEE8D5
+highlight Pmenu ctermbg=black
 " 选中项
-highlight PmenuSel ctermfg=2 ctermbg=3 guifg=#AFD700 guibg=#106900
-
+"highlight PmenuSel ctermfg=2 ctermbg=3 guifg=#AFD700 guibg=#106900
+highlight PmenuSel  ctermfg=green
 " 补全功能在注释中同样有效
 let g:ycm_complete_in_comments=1
 
@@ -424,7 +425,7 @@ let g:ycm_complete_in_comments=1
 let g:ycm_confirm_extra_conf=0
 
 " 开启 YCM 标签补全引擎
-let g:ycm_collect_identifiers_from_tags_files=0
+let g:ycm_collect_identifiers_from_tags_files=1
 "" 引入 C++ 标准库 tags
 "set tags+=/data/misc/software/app/vim/stdcpp.tags
 "set tags+=/data/misc/software/app/vim/sys.tags
@@ -471,7 +472,7 @@ nmap <Leader>man :Man 3 <cword><CR>
 " 使用 NERDTree 插件查看工程文件。设置快捷键，速记：file list
 nmap <Leader>fl :NERDTreeToggle<CR>
 " 设置 NERDTree 子窗口宽度
-let NERDTreeWinSize=22
+let NERDTreeWinSize=42
 " 设置 NERDTree 子窗口位置
 let NERDTreeWinPos="right"
 " 显示隐藏文件
@@ -576,7 +577,10 @@ function QuoteDelim(char)
  return a:char.a:char."\<Esc>i"
  endif
 endf
-" cscope 查看函数调用关 
+" cscope 查看函数调用关
+" d --> 定义
+" b --> 被调用情况 
 nmap <C-\>d :cs find d <C-R>=expand("<cword>")<CR><CR>
 nmap <C-\>b :cs find c <C-R>=expand("<cword>")<CR><CR>
 cscope add cscope.out
+set path=./**
